@@ -2,6 +2,7 @@ package me.eccentric_nz.plugins.gamemodeinventories;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -28,8 +29,16 @@ public class GameModeInventoriesDatabase {
     public void createTables() {
         try {
             statement = connection.createStatement();
-            String queryInventories = "CREATE TABLE IF NOT EXISTS inventories (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, player TEXT, gamemode TEXT, inventory TEXT)";
+            String queryInventories = "CREATE TABLE IF NOT EXISTS inventories (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, player TEXT, gamemode TEXT, inventory TEXT, xp REAL)";
             statement.executeUpdate(queryInventories);
+            // update inventories if there is no xp column
+            String queryXP = "SELECT sql FROM sqlite_master WHERE tbl_name = 'inventories' AND sql LIKE '%xp REAL%'";
+            ResultSet rsXP = statement.executeQuery(queryXP);
+            if (!rsXP.next()) {
+                String queryAlter = "ALTER TABLE inventories ADD xp REAL";
+                statement.executeUpdate(queryAlter);
+                System.out.println(GameModeInventoriesConstants.MY_PLUGIN_NAME + "Adding xp to database!");
+            }
             statement.close();
         } catch (SQLException e) {
             plugin.debug("Create table error: " + e);
