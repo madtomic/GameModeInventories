@@ -28,6 +28,13 @@ public class GameModeInventoriesCommands implements CommandExecutor {
                     plugin.saveConfig();
                     return true;
                 }
+                if (args.length == 1 && args[0].equalsIgnoreCase("xp")) {
+                    boolean bool = !plugin.getConfig().getBoolean("xp");
+                    plugin.getConfig().set("xp", bool);
+                    sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "xp was set to: " + bool);
+                    plugin.saveConfig();
+                    return true;
+                }
                 if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
                     boolean bool = !plugin.getConfig().getBoolean("debug");
                     plugin.getConfig().set("debug", bool);
