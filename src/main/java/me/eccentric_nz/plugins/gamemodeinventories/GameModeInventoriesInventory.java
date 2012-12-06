@@ -14,12 +14,12 @@ import java.io.DataOutputStream;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.server.v1_4_5.NBTBase;
-import net.minecraft.server.v1_4_5.NBTTagCompound;
-import net.minecraft.server.v1_4_5.NBTTagList;
+import net.minecraft.server.NBTBase;
+import net.minecraft.server.NBTTagCompound;
+import net.minecraft.server.NBTTagList;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.craftbukkit.v1_4_5.inventory.CraftInventoryCustom;
-import org.bukkit.craftbukkit.v1_4_5.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.inventory.CraftInventoryCustom;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -59,7 +59,7 @@ public class GameModeInventoriesInventory {
             NBTTagCompound inputObject = (NBTTagCompound) itemList.get(i);
             // IsEmpty
             if (!inputObject.d()) {
-                inventory.setItem(i, new CraftItemStack(net.minecraft.server.v1_4_5.ItemStack.a(inputObject)));
+                inventory.setItem(i, new CraftItemStack(net.minecraft.server.ItemStack.a(inputObject)));
             }
         }
         // Serialize that array
