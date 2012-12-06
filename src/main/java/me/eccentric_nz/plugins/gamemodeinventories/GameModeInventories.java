@@ -48,6 +48,10 @@ public class GameModeInventories extends JavaPlugin implements Listener {
         } catch (IOException e) {
             // Failed to submit the stats :-(
         }
+        if (!getConfig().contains("xp")) {
+            getConfig().set("xp", true);
+            saveConfig();
+        }
     }
 
     @Override
