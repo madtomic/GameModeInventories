@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.eccentric_nz.plugins.gamemodeinventories</groupId>
     <artifactId>GameModeInventories</artifactId>
-    <version>1.1.1</version>
+    <version>1.2</version>
     <name>GameModeInventories</name>
     <repositories>
         <repository>
