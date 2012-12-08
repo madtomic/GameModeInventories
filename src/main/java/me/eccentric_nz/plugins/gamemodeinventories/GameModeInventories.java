@@ -52,6 +52,10 @@ public class GameModeInventories extends JavaPlugin implements Listener {
             getConfig().set("xp", true);
             saveConfig();
         }
+        if (!getConfig().contains("armor")) {
+            getConfig().set("armor", true);
+            saveConfig();
+        }
     }
 
     @Override

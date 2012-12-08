@@ -35,6 +35,13 @@ public class GameModeInventoriesCommands implements CommandExecutor {
                     plugin.saveConfig();
                     return true;
                 }
+                if (args.length == 1 && args[0].equalsIgnoreCase("armor")) {
+                    boolean bool = !plugin.getConfig().getBoolean("armor");
+                    plugin.getConfig().set("armor", bool);
+                        sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "armor was set to: " + bool);
+                    plugin.saveConfig();
+                    return true;
+                }
                 if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
                     boolean bool = !plugin.getConfig().getBoolean("debug");
                     plugin.getConfig().set("debug", bool);
