@@ -1,9 +1,3 @@
-/*
- * Kristian S. Stangeland aadnk
- * Norway
- * kristian@comphenix.net
- * http://www.comphenix.net/
- */
 package me.eccentric_nz.plugins.gamemodeinventories;
 
 import com.google.common.primitives.Bytes;
@@ -14,6 +8,10 @@ import java.io.DataOutputStream;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import net.minecraft.server.NBTBase;
 import net.minecraft.server.NBTTagCompound;
 import net.minecraft.server.NBTTagList;
@@ -22,12 +20,100 @@ import org.bukkit.craftbukkit.inventory.CraftInventoryCustom;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
 
-public class GameModeInventoriesInventory {
+public class GameModeInventoriesInventory_pre implements GameModeInventoriesAPI {
 
     private final static String textBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     private final static char[] alphabetBase64 = textBase64.toCharArray();
     private final static String regexBase64 = "[^" + textBase64 + "=]";
+    GameModeInventoriesDatabase service = GameModeInventoriesDatabase.getInstance();
+    GameModeInventoriesXPCalculator xpc;
+    GameModeInventoriesArmour armour;
+
+    @Override
+    public void switchInventories(Player p, Inventory inventory, boolean savexp, boolean savearmour, GameMode newGM) {
+        String name = p.getName();
+        String currentGM = p.getGameMode().name();
+        if (savexp) {
+            xpc = new GameModeInventoriesXPCalculator(p);
+        }
+        if (savearmour) {
+            armour = new GameModeInventoriesArmour();
+        }
+        String inv = GameModeInventoriesInventory_v1_4_6.toBase64(p.getInventory());
+        try {
+            Connection connection = service.getConnection();
+            Statement statement = connection.createStatement();
+            // get their current gamemode inventory from database
+            String getQuery = "SELECT id FROM inventories WHERE player = '" + name + "' AND gamemode = '" + currentGM + "'";
+            ResultSet rsInv = statement.executeQuery(getQuery);
+            int id = 0;
+            if (rsInv.next()) {
+                // update it with their current inventory
+                id = rsInv.getInt("id");
+                String updateQuery = "UPDATE inventories SET inventory = '" + inv + "' WHERE id = " + id;
+                statement.executeUpdate(updateQuery);
+            } else {
+                // they haven't got an inventory saved yet so make one with their current inventory
+                String invQuery = "INSERT INTO inventories (player, gamemode, inventory) VALUES ('" + name + "','" + currentGM + "','" + inv + "')";
+                statement.executeUpdate(invQuery);
+                ResultSet idRS = statement.getGeneratedKeys();
+                if (idRS.next()) {
+                    id = idRS.getInt(1);
+                }
+            }
+            rsInv.close();
+            if (savexp) {
+                // get players XP
+                int a = xpc.getCurrentExp();
+                String xpQuery = "UPDATE inventories SET xp = '" + a + "' WHERE id = " + id;
+                statement.executeUpdate(xpQuery);
+            }
+            if (savearmour) {
+                // get players XP
+                Inventory armor = armour.getArmorInventory(p.getInventory());
+                String arm = GameModeInventoriesInventory_v1_4_6.toBase64(armor);
+                String armourQuery = "UPDATE inventories SET armour = '" + arm + "' WHERE id = " + id;
+                statement.executeUpdate(armourQuery);
+            }
+            // check if they have an inventory for the new gamemode
+            String getNewQuery = "SELECT inventory, xp, armour FROM inventories WHERE player = '" + name + "' AND gamemode = '" + newGM + "'";
+            ResultSet rsNewInv = statement.executeQuery(getNewQuery);
+            int amount;
+            String savedarmour = "";
+            if (rsNewInv.next()) {
+                // set their inventory to the saved one
+                String base64 = rsNewInv.getString("inventory");
+                Inventory i = GameModeInventoriesInventory_v1_4_6.fromBase64(base64);
+                p.getInventory().setContents(i.getContents());
+                amount = rsNewInv.getInt("xp");
+                if (savearmour) {
+                    savedarmour = rsNewInv.getString("armour");
+                    Inventory a = GameModeInventoriesInventory_v1_4_6.fromBase64(savedarmour);
+                    armour.setArmour(p, a);
+                }
+            } else {
+                // start with an empty inventory
+                p.getInventory().clear();
+                if (savearmour) {
+                    p.getInventory().setBoots(null);
+                    p.getInventory().setChestplate(null);
+                    p.getInventory().setLeggings(null);
+                    p.getInventory().setHelmet(null);
+                }
+                amount = 0;
+            }
+            rsNewInv.close();
+            statement.close();
+            if (savexp) {
+                xpc.setExp(amount);
+            }
+        } catch (SQLException e) {
+            System.err.println("Could not save inventory on gamemode change, " + e);
+        }
+    }
 
     public static String toBase64(Inventory inventory) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -37,6 +123,7 @@ public class GameModeInventoriesInventory {
         for (int i = 0; i < inventory.getSize(); i++) {
             NBTTagCompound outputObject = new NBTTagCompound();
             CraftItemStack craft = getCraftVersion(inventory.getItem(i));
+
             // Convert the item stack to a NBT compound
             if (craft != null) {
                 craft.getHandle().save(outputObject);
@@ -104,6 +191,7 @@ public class GameModeInventoriesInventory {
             lookup.put(alphabetBase64[i], i);
         }
         lookup.put('=', 0);
+
         // Process four characters at a time
         for (int i = 0; i < subset.length(); i += 4) {
             // Convert these characters into the previous 24 bit number
