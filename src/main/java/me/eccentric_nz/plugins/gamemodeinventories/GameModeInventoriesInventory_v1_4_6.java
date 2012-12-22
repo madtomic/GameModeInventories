@@ -111,6 +111,58 @@ public class GameModeInventoriesInventory_v1_4_6 implements GameModeInventoriesI
         }
     }
 
+    @Override
+    public void saveOnDeath(Player p) {
+        String name = p.getName();
+        String gm = p.getGameMode().name();
+        String inv = toBase64(p.getInventory());
+        try {
+            Connection connection = service.getConnection();
+            Statement statement = connection.createStatement();
+            // get their current gamemode inventory from database
+            String getQuery = "SELECT id FROM inventories WHERE player = '" + name + "' AND gamemode = '" + gm + "'";
+            ResultSet rsInv = statement.executeQuery(getQuery);
+            if (rsInv.next()) {
+                // update it with their current inventory
+                int id = rsInv.getInt("id");
+                String updateQuery = "UPDATE inventories SET inventory = '" + inv + "' WHERE id = " + id;
+                statement.executeUpdate(updateQuery);
+                rsInv.close();
+            } else {
+                // they haven't got an inventory saved yet so make one with their current inventory
+                String invQuery = "INSERT INTO inventories (player, gamemode, inventory) VALUES ('" + name + "','" + gm + "','" + inv + "')";
+                statement.executeUpdate(invQuery);
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.err.println("Could not save inventories on player death, " + e);
+        }
+    }
+
+    @Override
+    public void restoreOnSpawn(Player p) {
+        String name = p.getName();
+        String gm = p.getGameMode().name();
+        // restore their inventory
+        try {
+            Connection connection = service.getConnection();
+            Statement statement = connection.createStatement();
+            // get their current gamemode inventory from database
+            String getQuery = "SELECT inventory FROM inventories WHERE player = '" + name + "' AND gamemode = '" + gm + "'";
+            ResultSet rsInv = statement.executeQuery(getQuery);
+            if (rsInv.next()) {
+                // set their inventory to the saved one
+                String base64 = rsInv.getString("inventory");
+                Inventory i = fromBase64(base64);
+                p.getInventory().setContents(i.getContents());
+            }
+            rsInv.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.err.println("Could not restore inventories on respawn, " + e);
+        }
+    }
+
     public static String toBase64(Inventory inventory) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutput = new DataOutputStream(outputStream);
