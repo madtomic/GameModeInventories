@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class GameModeInventories extends JavaPlugin implements Listener {
 
-    public GameModeInventoriesAPI inventoryHandler;
+    public GameModeInventoriesInventory_api inventoryHandler;
     protected static GameModeInventories plugin;
     PluginManager pm = Bukkit.getServer().getPluginManager();
     GameModeInventoriesListener GMListener = new GameModeInventoriesListener(this);
@@ -31,8 +31,8 @@ public class GameModeInventories extends JavaPlugin implements Listener {
         try {
             final Class<?> clazz = Class.forName("me.eccentric_nz.plugins.gamemodeinventories.GameModeInventoriesInventory_" + version);
             // Check if we have a NMSHandler class at that location.
-            if (GameModeInventoriesAPI.class.isAssignableFrom(clazz)) { // Make sure it actually implements IOP
-                this.inventoryHandler = (GameModeInventoriesAPI) clazz.getConstructor().newInstance(); // Set our handler
+            if (GameModeInventoriesInventory_api.class.isAssignableFrom(clazz)) { // Make sure it actually implements IOP
+                this.inventoryHandler = (GameModeInventoriesInventory_api) clazz.getConstructor().newInstance(); // Set our handler
             }
         } catch (final Exception e) {
             this.getLogger().severe("Could not find support for this CraftBukkit version.");

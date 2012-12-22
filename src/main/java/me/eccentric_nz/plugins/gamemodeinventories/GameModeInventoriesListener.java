@@ -9,9 +9,6 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 public class GameModeInventoriesListener implements Listener {
 
     private GameModeInventories plugin;
-    GameModeInventoriesDatabase service = GameModeInventoriesDatabase.getInstance();
-    GameModeInventoriesXPCalculator xpc;
-    GameModeInventoriesArmour armour;
 
     public GameModeInventoriesListener(GameModeInventories plugin) {
         this.plugin = plugin;
