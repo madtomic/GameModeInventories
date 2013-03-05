@@ -12,6 +12,7 @@ import java.sql.Statement;
 import net.minecraft.server.NBTBase;
 import net.minecraft.server.NBTTagCompound;
 import net.minecraft.server.NBTTagList;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.inventory.CraftInventoryCustom;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
@@ -186,8 +187,14 @@ public class GameModeInventoriesInventory_pre implements GameModeInventoriesInve
         for (int i = 0; i < itemList.size(); i++) {
             NBTTagCompound inputObject = (NBTTagCompound) itemList.get(i);
             // IsEmpty
-            if (!inputObject.d()) {
-                inventory.setItem(i, new CraftItemStack(net.minecraft.server.ItemStack.a(inputObject)));
+            if (Bukkit.getServer().getBukkitVersion().equals("1.2.5-R4.1-MCPC-SNAPSHOT")) {
+                if (!itemList.get(i).equals("")) {
+                    inventory.setItem(i, new CraftItemStack(net.minecraft.server.ItemStack.a(inputObject)));
+                }
+            } else {
+                if (!inputObject.d()) {
+                    inventory.setItem(i, new CraftItemStack(net.minecraft.server.ItemStack.a(inputObject)));
+                }
             }
         }
         // Serialize that array
