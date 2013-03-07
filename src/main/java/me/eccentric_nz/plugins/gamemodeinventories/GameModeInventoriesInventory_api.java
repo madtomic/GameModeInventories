@@ -6,7 +6,7 @@ import org.bukkit.inventory.Inventory;
 
 public interface GameModeInventoriesInventory_api {
 
-    public void switchInventories(Player p, Inventory inventory, boolean savexp, boolean savearmour, GameMode newGM);
+    public void switchInventories(Player p, Inventory inventory, boolean savexp, boolean savearmour, boolean saveender, GameMode newGM);
 
     public void saveOnDeath(Player p);
 

@@ -1,4 +1,5 @@
 save_on_death: true
 xp: true
 armor: true
+enderchest: true
 debug: false

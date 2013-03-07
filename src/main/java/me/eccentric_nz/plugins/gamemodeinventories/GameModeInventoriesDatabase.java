@@ -29,7 +29,7 @@ public class GameModeInventoriesDatabase {
     public void createTables() {
         try {
             statement = connection.createStatement();
-            String queryInventories = "CREATE TABLE IF NOT EXISTS inventories (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, player TEXT, gamemode TEXT, inventory TEXT, xp REAL, armour TEXT)";
+            String queryInventories = "CREATE TABLE IF NOT EXISTS inventories (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, player TEXT, gamemode TEXT, inventory TEXT, xp REAL, armour TEXT, enderchest TEXT)";
             statement.executeUpdate(queryInventories);
             // update inventories if there is no xp column
             String queryXP = "SELECT sql FROM sqlite_master WHERE tbl_name = 'inventories' AND sql LIKE '%xp REAL%'";
@@ -46,6 +46,14 @@ public class GameModeInventoriesDatabase {
                 String queryAlter2 = "ALTER TABLE inventories ADD armour TEXT";
                 statement.executeUpdate(queryAlter2);
                 System.out.println(GameModeInventoriesConstants.MY_PLUGIN_NAME + "Adding armour to database!");
+            }
+            // update inventories if there is no enderchest column
+            String queryEnder = "SELECT sql FROM sqlite_master WHERE tbl_name = 'inventories' AND sql LIKE '%enderchest TEXT%'";
+            ResultSet rsEnder = statement.executeQuery(queryEnder);
+            if (!rsEnder.next()) {
+                String queryAlter3 = "ALTER TABLE inventories ADD enderchest TEXT";
+                statement.executeUpdate(queryAlter3);
+                System.out.println(GameModeInventoriesConstants.MY_PLUGIN_NAME + "Adding enderchest to database!");
             }
             statement.close();
         } catch (SQLException e) {

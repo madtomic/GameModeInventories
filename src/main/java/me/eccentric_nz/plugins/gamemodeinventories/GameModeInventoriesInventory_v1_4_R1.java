@@ -32,7 +32,7 @@ public class GameModeInventoriesInventory_v1_4_R1 implements GameModeInventories
     GameModeInventoriesXPCalculator xpc;
 
     @Override
-    public void switchInventories(Player p, Inventory inventory, boolean savexp, boolean savearmour, GameMode newGM) {
+    public void switchInventories(Player p, Inventory inventory, boolean savexp, boolean savearmour, boolean saveender, GameMode newGM) {
         String name = p.getName();
         String currentGM = p.getGameMode().name();
         if (savexp) {
@@ -74,11 +74,21 @@ public class GameModeInventoriesInventory_v1_4_R1 implements GameModeInventories
                 String armourQuery = "UPDATE inventories SET armour = '" + arm + "' WHERE id = " + id;
                 statement.executeUpdate(armourQuery);
             }
+            if (saveender) {
+                // get players enderchest
+                Inventory ec = p.getEnderChest();
+                if (ec != null) {
+                    String ender = toBase64(ec);
+                    String enderQuery = "UPDATE inventories SET enderchest = '" + ender + "' WHERE id = " + id;
+                    statement.executeUpdate(enderQuery);
+                }
+            }
             // check if they have an inventory for the new gamemode
-            String getNewQuery = "SELECT inventory, xp, armour FROM inventories WHERE player = '" + name + "' AND gamemode = '" + newGM + "'";
+            String getNewQuery = "SELECT inventory, xp, armour, enderchest FROM inventories WHERE player = '" + name + "' AND gamemode = '" + newGM + "'";
             ResultSet rsNewInv = statement.executeQuery(getNewQuery);
             int amount;
-            String savedarmour = "";
+            String savedarmour;
+            String savedender;
             if (rsNewInv.next()) {
                 // set their inventory to the saved one
                 String base64 = rsNewInv.getString("inventory");
@@ -90,6 +100,12 @@ public class GameModeInventoriesInventory_v1_4_R1 implements GameModeInventories
                     Inventory a = fromBase64(savedarmour);
                     setArmour(p, a);
                 }
+                if (saveender) {
+                    savedender = rsNewInv.getString("enderchest");
+                    Inventory a = fromBase64(savedender);
+                    Inventory echest = p.getEnderChest();
+                    echest.setContents(a.getContents());
+                }
             } else {
                 // start with an empty inventory
                 p.getInventory().clear();
@@ -98,6 +114,10 @@ public class GameModeInventoriesInventory_v1_4_R1 implements GameModeInventories
                     p.getInventory().setChestplate(null);
                     p.getInventory().setLeggings(null);
                     p.getInventory().setHelmet(null);
+                }
+                if (saveender) {
+                    Inventory echest = p.getEnderChest();
+                    echest.clear();
                 }
                 amount = 0;
             }
