@@ -83,6 +83,14 @@ public class GameModeInventories extends JavaPlugin implements Listener {
             getConfig().set("enderchest", true);
             saveConfig();
         }
+        if (!getConfig().contains("restrict_creative")) {
+            getConfig().set("restrict_creative", false);
+            saveConfig();
+        }
+        if (!getConfig().contains("no_drops")) {
+            getConfig().set("no_drops", false);
+            saveConfig();
+        }
     }
 
     @Override

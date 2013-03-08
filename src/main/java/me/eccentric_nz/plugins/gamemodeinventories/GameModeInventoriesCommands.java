@@ -1,5 +1,8 @@
 package me.eccentric_nz.plugins.gamemodeinventories;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -7,9 +10,17 @@ import org.bukkit.command.CommandSender;
 public class GameModeInventoriesCommands implements CommandExecutor {
 
     private GameModeInventories plugin;
+    private List<String> firstArgs = new ArrayList<String>();
 
     public GameModeInventoriesCommands(GameModeInventories plugin) {
         this.plugin = plugin;
+        firstArgs.add("armor");
+        firstArgs.add("debug");
+        firstArgs.add("enderchest");
+        firstArgs.add("no_drops");
+        firstArgs.add("restrict_creative");
+        firstArgs.add("save_on_death");
+        firstArgs.add("xp");
     }
 
     @Override
@@ -21,38 +32,11 @@ public class GameModeInventoriesCommands implements CommandExecutor {
                 return true;
             }
             if (sender.hasPermission("gamemodeinventories.admin")) {
-                if (args.length == 1 && args[0].equalsIgnoreCase("save_on_death")) {
-                    boolean bool = !plugin.getConfig().getBoolean("save_on_death");
-                    plugin.getConfig().set("save_on_death", bool);
-                    sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "save_on_death was set to: " + bool);
-                    plugin.saveConfig();
-                    return true;
-                }
-                if (args.length == 1 && args[0].equalsIgnoreCase("xp")) {
-                    boolean bool = !plugin.getConfig().getBoolean("xp");
-                    plugin.getConfig().set("xp", bool);
-                    sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "xp was set to: " + bool);
-                    plugin.saveConfig();
-                    return true;
-                }
-                if (args.length == 1 && args[0].equalsIgnoreCase("armor")) {
-                    boolean bool = !plugin.getConfig().getBoolean("armor");
-                    plugin.getConfig().set("armor", bool);
-                    sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "armor was set to: " + bool);
-                    plugin.saveConfig();
-                    return true;
-                }
-                if (args.length == 1 && args[0].equalsIgnoreCase("enderchest")) {
-                    boolean bool = !plugin.getConfig().getBoolean("enderchest");
-                    plugin.getConfig().set("enderchest", bool);
-                    sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "enderchest was set to: " + bool);
-                    plugin.saveConfig();
-                    return true;
-                }
-                if (args.length == 1 && args[0].equalsIgnoreCase("debug")) {
-                    boolean bool = !plugin.getConfig().getBoolean("debug");
-                    plugin.getConfig().set("debug", bool);
-                    sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "Debugging was set to: " + bool);
+                String option = args[0].toLowerCase(Locale.ENGLISH);
+                if (args.length == 1 && firstArgs.contains(option)) {
+                    boolean bool = !plugin.getConfig().getBoolean(option);
+                    plugin.getConfig().set(option, bool);
+                    sender.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + option + " was set to: " + bool);
                     plugin.saveConfig();
                     return true;
                 }
