@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,12 +41,15 @@ public class GameModeInventoriesListener implements Listener {
     @EventHandler
     public void onInventoryOpen(PlayerInteractEvent event) {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
-            Material m = event.getClickedBlock().getType();
-            Player p = event.getPlayer();
-            GameMode gm = p.getGameMode();
-            if (gm.equals(GameMode.CREATIVE) && containers.contains(m) && !p.hasPermission("gamemodeinventories.bypass") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-                event.setCancelled(true);
-                p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access inventories in CREATIVE!");
+            Block b = event.getClickedBlock();
+            if (b != null) {
+                Material m = b.getType();
+                Player p = event.getPlayer();
+                GameMode gm = p.getGameMode();
+                if (gm.equals(GameMode.CREATIVE) && containers.contains(m) && !p.hasPermission("gamemodeinventories.bypass") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                    event.setCancelled(true);
+                    p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access inventories in CREATIVE!");
+                }
             }
         }
     }

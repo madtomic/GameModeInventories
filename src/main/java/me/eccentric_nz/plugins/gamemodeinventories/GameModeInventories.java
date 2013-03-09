@@ -51,6 +51,8 @@ public class GameModeInventories extends JavaPlugin implements Listener {
             getDataFolder().setExecutable(true);
         }
         this.saveDefaultConfig();
+        GameModeInventoriesConfig tc = new GameModeInventoriesConfig(this);
+        tc.checkConfig();
 
         try {
             String path = getDataFolder() + File.separator + "GMI.db";
@@ -71,26 +73,7 @@ public class GameModeInventories extends JavaPlugin implements Listener {
         } catch (IOException e) {
             // Failed to submit the stats :-(
         }
-        if (!getConfig().contains("xp")) {
-            getConfig().set("xp", true);
-            saveConfig();
-        }
-        if (!getConfig().contains("armor")) {
-            getConfig().set("armor", true);
-            saveConfig();
-        }
-        if (!getConfig().contains("enderchest")) {
-            getConfig().set("enderchest", true);
-            saveConfig();
-        }
-        if (!getConfig().contains("restrict_creative")) {
-            getConfig().set("restrict_creative", false);
-            saveConfig();
-        }
-        if (!getConfig().contains("no_drops")) {
-            getConfig().set("no_drops", false);
-            saveConfig();
-        }
+
     }
 
     @Override

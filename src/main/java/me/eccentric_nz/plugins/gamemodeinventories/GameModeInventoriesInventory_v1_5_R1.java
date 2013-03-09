@@ -10,23 +10,23 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import net.minecraft.server.v1_4_5.NBTBase;
-import net.minecraft.server.v1_4_5.NBTTagCompound;
-import net.minecraft.server.v1_4_5.NBTTagList;
+import net.minecraft.server.v1_4_R1.NBTBase;
+import net.minecraft.server.v1_4_R1.NBTTagCompound;
+import net.minecraft.server.v1_4_R1.NBTTagList;
 import org.bukkit.GameMode;
-import org.bukkit.craftbukkit.v1_4_5.inventory.CraftInventoryCustom;
-import org.bukkit.craftbukkit.v1_4_5.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftInventoryCustom;
+import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-public class GameModeInventoriesInventory_v1_4_5 implements GameModeInventoriesInventory_api {
+public class GameModeInventoriesInventory_v1_5_R1 implements GameModeInventoriesInventory_api {
 
     GameModeInventoriesDatabase service = GameModeInventoriesDatabase.getInstance();
     GameModeInventoriesXPCalculator xpc;
@@ -191,34 +191,40 @@ public class GameModeInventoriesInventory_v1_4_5 implements GameModeInventoriesI
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutput = new DataOutputStream(outputStream);
         NBTTagList itemList = new NBTTagList();
+
         // Save every element in the list
         for (int i = 0; i < inventory.getSize(); i++) {
             NBTTagCompound outputObject = new NBTTagCompound();
             CraftItemStack craft = getCraftVersion(inventory.getItem(i));
+
             // Convert the item stack to a NBT compound
             if (craft != null) {
                 CraftItemStack.asNMSCopy(craft).save(outputObject);
             }
             itemList.add(outputObject);
         }
+
         // Now save the list
         NBTBase.a(itemList, dataOutput);
+
         // Serialize that array
-        return new BigInteger(1, outputStream.toByteArray()).toString(32);
+        return Base64Coder.encodeLines(outputStream.toByteArray());
     }
 
     public static Inventory fromBase64(String data) {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(new BigInteger(data, 32).toByteArray());
-        //ByteArrayInputStream inputStream = new ByteArrayInputStream(decodeBase64(data));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
         NBTTagList itemList = (NBTTagList) NBTBase.b(new DataInputStream(inputStream));
         Inventory inventory = new CraftInventoryCustom(null, itemList.size());
+
         for (int i = 0; i < itemList.size(); i++) {
             NBTTagCompound inputObject = (NBTTagCompound) itemList.get(i);
-            // IsEmpty
-            if (!inputObject.d()) {
-                inventory.setItem(i, CraftItemStack.asCraftMirror(net.minecraft.server.v1_4_5.ItemStack.a(inputObject)));
+
+            if (!inputObject.isEmpty()) {
+                inventory.setItem(i, CraftItemStack.asCraftMirror(
+                        net.minecraft.server.v1_4_R1.ItemStack.createStack(inputObject)));
             }
         }
+
         // Serialize that array
         return inventory;
     }

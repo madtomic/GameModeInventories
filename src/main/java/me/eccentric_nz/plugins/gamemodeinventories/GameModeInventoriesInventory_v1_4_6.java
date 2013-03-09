@@ -102,6 +102,10 @@ public class GameModeInventoriesInventory_v1_4_6 implements GameModeInventoriesI
                 }
                 if (saveender) {
                     savedender = rsNewInv.getString("enderchest");
+                    if (savedender.equals("[Null]") || savedender.equals("") || savedender.isEmpty()) {
+                        // empty inventory
+                        savedender = "CQAACgAAABsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+                    }
                     Inventory a = fromBase64(savedender);
                     Inventory echest = p.getEnderChest();
                     echest.setContents(a.getContents());
