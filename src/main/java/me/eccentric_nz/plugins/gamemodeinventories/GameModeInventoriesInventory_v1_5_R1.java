@@ -14,12 +14,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import net.minecraft.server.v1_4_R1.NBTBase;
-import net.minecraft.server.v1_4_R1.NBTTagCompound;
-import net.minecraft.server.v1_4_R1.NBTTagList;
+import net.minecraft.server.v1_5_R1.NBTBase;
+import net.minecraft.server.v1_5_R1.NBTTagCompound;
+import net.minecraft.server.v1_5_R1.NBTTagList;
 import org.bukkit.GameMode;
-import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftInventoryCustom;
-import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_5_R1.inventory.CraftInventoryCustom;
+import org.bukkit.craftbukkit.v1_5_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -221,7 +221,7 @@ public class GameModeInventoriesInventory_v1_5_R1 implements GameModeInventories
 
             if (!inputObject.isEmpty()) {
                 inventory.setItem(i, CraftItemStack.asCraftMirror(
-                        net.minecraft.server.v1_4_R1.ItemStack.createStack(inputObject)));
+                        net.minecraft.server.v1_5_R1.ItemStack.createStack(inputObject)));
             }
         }
 
