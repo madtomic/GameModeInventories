@@ -12,6 +12,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 
 public class GameModeInventoriesListener implements Listener {
 
@@ -24,6 +25,7 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.DISPENSER);
         containers.add(Material.FURNACE);
         containers.add(Material.ENDER_CHEST);
+        containers.add(Material.TRAPPED_CHEST);
     }
 
     @EventHandler
@@ -62,6 +64,18 @@ public class GameModeInventoriesListener implements Listener {
             if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
                 event.setCancelled(true);
                 p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to drop items in CREATIVE!");
+            }
+        }
+    }
+
+    @EventHandler
+    public void noPickup(PlayerPickupItemEvent event) {
+        if (plugin.getConfig().getBoolean("no_pickups")) {
+            Player p = event.getPlayer();
+            GameMode gm = p.getGameMode();
+            if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
+                event.setCancelled(true);
+                p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to pick up items in CREATIVE!");
             }
         }
     }

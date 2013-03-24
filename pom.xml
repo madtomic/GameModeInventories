@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.eccentric_nz.plugins.gamemodeinventories</groupId>
     <artifactId>GameModeInventories</artifactId>
-    <version>1.5</version>
+    <version>1.5.3</version>
     <name>GameModeInventories</name>
     <repositories>
         <repository>
@@ -61,8 +61,15 @@
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.5</artifactId>
+            <version>R0.1-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.5-R0.1-SNAPSHOT</version>
+            <version>1.5.1-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
