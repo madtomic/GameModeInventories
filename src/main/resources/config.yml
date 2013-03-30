@@ -4,4 +4,5 @@ armor: true
 enderchest: true
 restrict_creative: false
 no_drops: false
+remove_potions: true
 debug: false

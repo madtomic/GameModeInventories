@@ -3,7 +3,7 @@ description: Allow players to have separate inventories for each game mode (Crea
 main: me.eccentric_nz.plugins.gamemodeinventories.GameModeInventories
 name: GameModeInventories
 startup: postworld
-version: '1.5.3'
+version: '1.6'
 permissions:
   gamemodeinventories.use:
     default: true
@@ -13,7 +13,7 @@ permissions:
     description: Allow players to save their inventories on death, and restore them on respawn.
   gamemodeinventories.bypass:
     default: op
-    description: Allow players to access inventories in CREATIVE mode even if 'restrict_creative' is true. Also allow CREATIVE players to drop items.
+    description: Allow players to access inventories in CREATIVE mode even if 'restrict_creative' is true. Also allow CREATIVE players to drop and pickup items.
   gamemodeinventories.admin:
     default: op
     description: Allow players to change config options.

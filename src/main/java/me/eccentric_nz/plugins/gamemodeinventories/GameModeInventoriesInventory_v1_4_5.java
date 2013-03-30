@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
 
 public class GameModeInventoriesInventory_v1_4_5 implements GameModeInventoriesInventory_api {
 
@@ -32,7 +33,7 @@ public class GameModeInventoriesInventory_v1_4_5 implements GameModeInventoriesI
     GameModeInventoriesXPCalculator xpc;
 
     @Override
-    public void switchInventories(Player p, Inventory inventory, boolean savexp, boolean savearmour, boolean saveender, GameMode newGM) {
+    public void switchInventories(Player p, Inventory inventory, boolean savexp, boolean savearmour, boolean saveender, boolean potions, GameMode newGM) {
         String name = p.getName();
         String currentGM = p.getGameMode().name();
         if (savexp) {
@@ -81,6 +82,12 @@ public class GameModeInventoriesInventory_v1_4_5 implements GameModeInventoriesI
                     String ender = toBase64(ec);
                     String enderQuery = "UPDATE inventories SET enderchest = '" + ender + "' WHERE id = " + id;
                     statement.executeUpdate(enderQuery);
+                }
+            }
+            if (potions && currentGM.equals("CREATIVE") && newGM.equals(GameMode.SURVIVAL)) {
+                // remove all potion effects
+                for (PotionEffect effect : p.getActivePotionEffects()) {
+                    p.removePotionEffect(effect.getType());
                 }
             }
             // check if they have an inventory for the new gamemode

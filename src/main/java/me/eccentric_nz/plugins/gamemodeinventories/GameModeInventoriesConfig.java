@@ -31,6 +31,7 @@ public class GameModeInventoriesConfig {
         boolOptions.put("enderchest", true);
         boolOptions.put("no_drops", false);
         boolOptions.put("no_pickups", false);
+        boolOptions.put("remove_potions", true);
         boolOptions.put("restrict_creative", false);
         boolOptions.put("save_on_death", true);
         boolOptions.put("xp", true);

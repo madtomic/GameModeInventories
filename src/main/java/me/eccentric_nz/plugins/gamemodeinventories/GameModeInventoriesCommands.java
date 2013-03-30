@@ -19,6 +19,7 @@ public class GameModeInventoriesCommands implements CommandExecutor {
         firstArgs.add("enderchest");
         firstArgs.add("no_drops");
         firstArgs.add("no_pickups");
+        firstArgs.add("remove_potions");
         firstArgs.add("restrict_creative");
         firstArgs.add("save_on_death");
         firstArgs.add("xp");
