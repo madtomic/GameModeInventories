@@ -28,7 +28,7 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.TRAPPED_CHEST);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onGameModeChange(PlayerGameModeChangeEvent event) {
         Player p = event.getPlayer();
         GameMode newGM = event.getNewGameMode();
@@ -41,7 +41,7 @@ public class GameModeInventoriesListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInventoryOpen(PlayerInteractEvent event) {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Block b = event.getClickedBlock();
@@ -57,7 +57,7 @@ public class GameModeInventoriesListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerDrop(PlayerDropItemEvent event) {
         if (plugin.getConfig().getBoolean("no_drops")) {
             Player p = event.getPlayer();
@@ -69,7 +69,7 @@ public class GameModeInventoriesListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void noPickup(PlayerPickupItemEvent event) {
         if (plugin.getConfig().getBoolean("no_pickups")) {
             Player p = event.getPlayer();
