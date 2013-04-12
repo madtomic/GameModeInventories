@@ -142,6 +142,8 @@ public class GameModeInventoriesInventory_pre implements GameModeInventoriesInve
         String name = p.getName();
         String gm = p.getGameMode().name();
         String inv = toBase64(p.getInventory());
+        Inventory armor = getArmorInventory(p.getInventory());
+        String arm = toBase64(armor);
         try {
             Connection connection = service.getConnection();
             Statement statement = connection.createStatement();
@@ -151,12 +153,12 @@ public class GameModeInventoriesInventory_pre implements GameModeInventoriesInve
             if (rsInv.next()) {
                 // update it with their current inventory
                 int id = rsInv.getInt("id");
-                String updateQuery = "UPDATE inventories SET inventory = '" + inv + "' WHERE id = " + id;
+                String updateQuery = "UPDATE inventories SET inventory = '" + inv + "', armour = '" + arm + "' WHERE id = " + id;
                 statement.executeUpdate(updateQuery);
                 rsInv.close();
             } else {
                 // they haven't got an inventory saved yet so make one with their current inventory
-                String invQuery = "INSERT INTO inventories (player, gamemode, inventory) VALUES ('" + name + "','" + gm + "','" + inv + "')";
+                String invQuery = "INSERT INTO inventories (player, gamemode, inventory, armour) VALUES ('" + name + "','" + gm + "','" + inv + "','" + arm + "')";
                 statement.executeUpdate(invQuery);
             }
             statement.close();
@@ -174,13 +176,16 @@ public class GameModeInventoriesInventory_pre implements GameModeInventoriesInve
             Connection connection = service.getConnection();
             Statement statement = connection.createStatement();
             // get their current gamemode inventory from database
-            String getQuery = "SELECT inventory FROM inventories WHERE player = '" + name + "' AND gamemode = '" + gm + "'";
+            String getQuery = "SELECT inventory, armour FROM inventories WHERE player = '" + name + "' AND gamemode = '" + gm + "'";
             ResultSet rsInv = statement.executeQuery(getQuery);
             if (rsInv.next()) {
                 // set their inventory to the saved one
                 String base64 = rsInv.getString("inventory");
                 Inventory i = fromBase64(base64);
                 p.getInventory().setContents(i.getContents());
+                String savedarmour = rsInv.getString("armour");
+                Inventory a = fromBase64(savedarmour);
+                setArmour(p, a);
             }
             rsInv.close();
             statement.close();
