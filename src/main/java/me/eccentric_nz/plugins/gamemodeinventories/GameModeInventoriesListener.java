@@ -26,6 +26,8 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.FURNACE);
         containers.add(Material.ENDER_CHEST);
         containers.add(Material.TRAPPED_CHEST);
+        containers.add(Material.ANVIL);
+        containers.add(Material.ENCHANTMENT_TABLE);
     }
 
     @EventHandler(ignoreCancelled = true)
