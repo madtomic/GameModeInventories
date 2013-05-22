@@ -13,11 +13,14 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.Bukkit;
 
 public class GameModeInventoriesListener implements Listener {
 
     private GameModeInventories plugin;
     List<Material> containers = new ArrayList<Material>();
+    Version bukkitversion;
+    Version prewoodbuttonversion = new Version("1.5");
 
     public GameModeInventoriesListener(GameModeInventories plugin) {
         this.plugin = plugin;
@@ -25,9 +28,15 @@ public class GameModeInventoriesListener implements Listener {
         containers.add(Material.DISPENSER);
         containers.add(Material.FURNACE);
         containers.add(Material.ENDER_CHEST);
-        containers.add(Material.TRAPPED_CHEST);
         containers.add(Material.ANVIL);
         containers.add(Material.ENCHANTMENT_TABLE);
+        String[] v = Bukkit.getServer().getBukkitVersion().split("-");
+        bukkitversion = (!v[0].equalsIgnoreCase("unknown")) ? new Version(v[0]) : new Version("1.4.7");
+        if (bukkitversion.compareTo(prewoodbuttonversion) >= 0) {
+            containers.add(Material.HOPPER);
+            containers.add(Material.DROPPER);
+            containers.add(Material.TRAPPED_CHEST);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)

@@ -109,7 +109,7 @@ public class GameModeInventoriesInventory_v1_5_R3 implements GameModeInventories
                 }
                 if (saveender) {
                     savedender = rsNewInv.getString("enderchest");
-                    if (savedender.equals("[Null]") || savedender.equals("") || savedender.isEmpty()) {
+                    if (savedender == null || savedender.equals("[Null]") || savedender.equals("") || savedender.isEmpty()) {
                         // empty inventory
                         savedender = "CQAACgAAABsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
                     }

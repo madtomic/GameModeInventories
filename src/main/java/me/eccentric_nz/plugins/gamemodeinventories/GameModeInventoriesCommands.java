@@ -22,6 +22,7 @@ public class GameModeInventoriesCommands implements CommandExecutor {
         firstArgs.add("remove_potions");
         firstArgs.add("restrict_creative");
         firstArgs.add("save_on_death");
+        firstArgs.add("survival_on_world_change");
         firstArgs.add("xp");
     }
 
