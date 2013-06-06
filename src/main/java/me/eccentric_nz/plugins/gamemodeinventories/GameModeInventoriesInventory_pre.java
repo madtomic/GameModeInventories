@@ -70,15 +70,6 @@ public class GameModeInventoriesInventory_pre implements GameModeInventoriesInve
                 String armourQuery = "UPDATE inventories SET armour = '" + arm + "' WHERE id = " + id;
                 statement.executeUpdate(armourQuery);
             }
-            if (saveender) {
-                // get players enderchest
-                Inventory ec = p.getEnderChest();
-                if (ec != null) {
-                    String ender = toBase64(ec);
-                    String enderQuery = "UPDATE inventories SET enderchest = '" + ender + "' WHERE id = " + id;
-                    statement.executeUpdate(enderQuery);
-                }
-            }
             if (potions && currentGM.equals("CREATIVE") && newGM.equals(GameMode.SURVIVAL)) {
                 // remove all potion effects
                 for (PotionEffect effect : p.getActivePotionEffects()) {
@@ -102,16 +93,6 @@ public class GameModeInventoriesInventory_pre implements GameModeInventoriesInve
                     Inventory a = fromBase64(savedarmour);
                     setArmour(p, a);
                 }
-                if (saveender) {
-                    savedender = rsNewInv.getString("enderchest");
-                    if (savedender.equals("[Null]") || savedender.equals("") || savedender.isEmpty()) {
-                        // empty inventory
-                        savedender = "CQAACgAAABsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-                    }
-                    Inventory a = fromBase64(savedender);
-                    Inventory echest = p.getEnderChest();
-                    echest.setContents(a.getContents());
-                }
             } else {
                 // start with an empty inventory
                 p.getInventory().clear();
@@ -120,10 +101,6 @@ public class GameModeInventoriesInventory_pre implements GameModeInventoriesInve
                     p.getInventory().setChestplate(null);
                     p.getInventory().setLeggings(null);
                     p.getInventory().setHelmet(null);
-                }
-                if (saveender) {
-                    Inventory echest = p.getEnderChest();
-                    echest.clear();
                 }
                 amount = 0;
             }
@@ -223,7 +200,7 @@ public class GameModeInventoriesInventory_pre implements GameModeInventoriesInve
         for (int i = 0; i < itemList.size(); i++) {
             NBTTagCompound inputObject = (NBTTagCompound) itemList.get(i);
             // IsEmpty
-            if (Bukkit.getServer().getBukkitVersion().equals("1.2.5-R4.1-MCPC-SNAPSHOT")) {
+            if (Bukkit.getServer().getBukkitVersion().contains("1.2.5-R")) {
                 if (!itemList.get(i).equals("")) {
                     inventory.setItem(i, new CraftItemStack(net.minecraft.server.ItemStack.a(inputObject)));
                 }

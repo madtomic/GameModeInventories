@@ -21,17 +21,26 @@ public class GameModeInventoriesListener implements Listener {
     List<Material> containers = new ArrayList<Material>();
     Version bukkitversion;
     Version prewoodbuttonversion = new Version("1.5");
+    Version preenchanttableversion = new Version("1.4.6");
+    Version preanvilversion = new Version("1.4.2");
+    Version preenderchestversion = new Version("1.3.1");
 
     public GameModeInventoriesListener(GameModeInventories plugin) {
         this.plugin = plugin;
         containers.add(Material.CHEST);
         containers.add(Material.DISPENSER);
         containers.add(Material.FURNACE);
-        containers.add(Material.ENDER_CHEST);
-        containers.add(Material.ANVIL);
-        containers.add(Material.ENCHANTMENT_TABLE);
         String[] v = Bukkit.getServer().getBukkitVersion().split("-");
         bukkitversion = (!v[0].equalsIgnoreCase("unknown")) ? new Version(v[0]) : new Version("1.4.7");
+        if (bukkitversion.compareTo(preenderchestversion) >= 0) {
+            containers.add(Material.ENDER_CHEST);
+        }
+        if (bukkitversion.compareTo(preanvilversion) >= 0) {
+            containers.add(Material.ANVIL);
+        }
+        if (bukkitversion.compareTo(preenchanttableversion) >= 0) {
+            containers.add(Material.ENCHANTMENT_TABLE);
+        }
         if (bukkitversion.compareTo(prewoodbuttonversion) >= 0) {
             containers.add(Material.HOPPER);
             containers.add(Material.DROPPER);
