@@ -28,6 +28,7 @@ public class GameModeInventoriesConfig {
         // boolean
         boolOptions.put("armor", true);
         boolOptions.put("debug", false);
+        boolOptions.put("dont_spam_chat", false);
         boolOptions.put("enderchest", true);
         boolOptions.put("no_drops", false);
         boolOptions.put("no_pickups", false);

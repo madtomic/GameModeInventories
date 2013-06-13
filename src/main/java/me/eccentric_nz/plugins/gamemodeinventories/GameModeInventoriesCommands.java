@@ -16,6 +16,7 @@ public class GameModeInventoriesCommands implements CommandExecutor {
         this.plugin = plugin;
         firstArgs.add("armor");
         firstArgs.add("debug");
+        firstArgs.add("dont_spam_chat");
         firstArgs.add("enderchest");
         firstArgs.add("no_drops");
         firstArgs.add("no_pickups");

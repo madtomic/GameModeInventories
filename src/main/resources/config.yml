@@ -6,4 +6,5 @@ restrict_creative: false
 no_drops: false
 remove_potions: true
 survival_on_world_change: false
+dont_spam_chat: false
 debug: false

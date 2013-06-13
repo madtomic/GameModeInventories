@@ -71,7 +71,9 @@ public class GameModeInventoriesListener implements Listener {
                 GameMode gm = p.getGameMode();
                 if (gm.equals(GameMode.CREATIVE) && containers.contains(m) && !p.hasPermission("gamemodeinventories.bypass") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                     event.setCancelled(true);
-                    p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access inventories in CREATIVE!");
+                    if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
+                        p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access inventories in CREATIVE!");
+                    }
                 }
             }
         }
@@ -84,7 +86,9 @@ public class GameModeInventoriesListener implements Listener {
             GameMode gm = p.getGameMode();
             if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
                 event.setCancelled(true);
-                p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to drop items in CREATIVE!");
+                if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
+                    p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to drop items in CREATIVE!");
+                }
             }
         }
     }
@@ -96,7 +100,9 @@ public class GameModeInventoriesListener implements Listener {
             GameMode gm = p.getGameMode();
             if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
                 event.setCancelled(true);
-                p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to pick up items in CREATIVE!");
+                if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
+                    p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to pick up items in CREATIVE!");
+                }
             }
         }
     }
