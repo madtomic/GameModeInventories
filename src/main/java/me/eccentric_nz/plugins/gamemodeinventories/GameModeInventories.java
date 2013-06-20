@@ -2,7 +2,6 @@ package me.eccentric_nz.plugins.gamemodeinventories;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
