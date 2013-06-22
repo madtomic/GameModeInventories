@@ -18,7 +18,10 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.PoweredMinecart;
+import org.bukkit.entity.StorageMinecart;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
@@ -236,5 +239,12 @@ public class GameModeInventoriesInventory_pre implements GameModeInventoriesInve
     public void setArmour(Player p, Inventory i) {
         ItemStack[] is = i.getContents();
         p.getInventory().setArmorContents(is);
+    }
+
+    public boolean isInstanceOf(Entity e) {
+        if (e instanceof PoweredMinecart || e instanceof StorageMinecart) {
+            return true;
+        }
+        return false;
     }
 }

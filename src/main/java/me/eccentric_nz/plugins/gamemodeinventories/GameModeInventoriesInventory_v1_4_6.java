@@ -21,7 +21,10 @@ import net.minecraft.server.v1_4_6.NBTTagList;
 import org.bukkit.GameMode;
 import org.bukkit.craftbukkit.v1_4_6.inventory.CraftInventoryCustom;
 import org.bukkit.craftbukkit.v1_4_6.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.PoweredMinecart;
+import org.bukkit.entity.StorageMinecart;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -257,5 +260,12 @@ public class GameModeInventoriesInventory_v1_4_6 implements GameModeInventoriesI
     public void setArmour(Player p, Inventory i) {
         ItemStack[] is = i.getContents();
         p.getInventory().setArmorContents(is);
+    }
+
+    public boolean isInstanceOf(Entity e) {
+        if (e instanceof PoweredMinecart || e instanceof StorageMinecart) {
+            return true;
+        }
+        return false;
     }
 }

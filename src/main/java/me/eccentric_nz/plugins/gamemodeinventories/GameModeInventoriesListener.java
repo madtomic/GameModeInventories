@@ -14,6 +14,11 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.minecart.HopperMinecart;
+import org.bukkit.entity.minecart.PoweredMinecart;
+import org.bukkit.entity.minecart.StorageMinecart;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class GameModeInventoriesListener implements Listener {
 
@@ -27,6 +32,7 @@ public class GameModeInventoriesListener implements Listener {
 
     public GameModeInventoriesListener(GameModeInventories plugin) {
         this.plugin = plugin;
+        containers.add(Material.BREWING_STAND);
         containers.add(Material.CHEST);
         containers.add(Material.DISPENSER);
         containers.add(Material.FURNACE);
@@ -37,13 +43,14 @@ public class GameModeInventoriesListener implements Listener {
         }
         if (bukkitversion.compareTo(preanvilversion) >= 0) {
             containers.add(Material.ANVIL);
+            containers.add(Material.BEACON);
         }
         if (bukkitversion.compareTo(preenchanttableversion) >= 0) {
             containers.add(Material.ENCHANTMENT_TABLE);
         }
         if (bukkitversion.compareTo(prewoodbuttonversion) >= 0) {
-            containers.add(Material.HOPPER);
             containers.add(Material.DROPPER);
+            containers.add(Material.HOPPER);
             containers.add(Material.TRAPPED_CHEST);
         }
     }
@@ -75,6 +82,21 @@ public class GameModeInventoriesListener implements Listener {
                         p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access inventories in CREATIVE!");
                     }
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onMinecartClick(PlayerInteractEntityEvent event) {
+        if (plugin.getConfig().getBoolean("restrict_creative")) {
+            Entity entity = event.getRightClicked();
+            Player p = event.getPlayer();
+            GameMode gm = p.getGameMode();
+            if (gm.equals(GameMode.CREATIVE) && plugin.inventoryHandler.isInstanceOf(entity) && !p.hasPermission("gamemodeinventories.bypass")) {
+                if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
+                    p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access inventories in CREATIVE!");
+                }
+                event.setCancelled(true);
             }
         }
     }
