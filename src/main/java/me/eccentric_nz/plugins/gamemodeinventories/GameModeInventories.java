@@ -91,10 +91,10 @@ public class GameModeInventories extends JavaPlugin implements Listener {
                 this.inventoryHandler = (GameModeInventoriesInventory_api) clazz.getConstructor().newInstance(); // Set our handler
             }
             found = true;
-            System.out.println("Loading support for CB " + version);
+            System.out.println("[GameModeInventories] Loading support for CB " + version);
         } catch (final Exception e) {
-            this.getLogger().severe("Could not find support for this CraftBukkit version.");
-            this.getLogger().info("Check for updates at http://dev.bukkit.org/server-mods/gamemodeinventories/");
+            this.getLogger().severe("[GameModeInventories] Could not find support for this CraftBukkit version.");
+            this.getLogger().info("[GameModeInventories] Check for updates at http://dev.bukkit.org/server-mods/gamemodeinventories/");
             this.setEnabled(false);
             found = false;
         }
