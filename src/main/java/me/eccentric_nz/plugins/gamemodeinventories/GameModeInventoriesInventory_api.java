@@ -4,6 +4,7 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
 public interface GameModeInventoriesInventory_api {
 
@@ -14,4 +15,6 @@ public interface GameModeInventoriesInventory_api {
     public void restoreOnSpawn(Player p);
 
     public boolean isInstanceOf(Entity e);
+
+    public boolean isInstanceOf(InventoryHolder h);
 }

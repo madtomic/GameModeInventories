@@ -21,10 +21,12 @@ import org.bukkit.GameMode;
 import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftInventoryCustom;
 import org.bukkit.craftbukkit.v1_4_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.PoweredMinecart;
 import org.bukkit.entity.StorageMinecart;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
@@ -269,9 +271,13 @@ public class GameModeInventoriesInventory_v1_4_R1 implements GameModeInventories
     }
 
     public boolean isInstanceOf(Entity e) {
-        if (e instanceof PoweredMinecart || e instanceof StorageMinecart) {
+        if (e instanceof PoweredMinecart || e instanceof StorageMinecart || e instanceof ItemFrame) {
             return true;
         }
+        return false;
+    }
+
+    public boolean isInstanceOf(InventoryHolder h) {
         return false;
     }
 }

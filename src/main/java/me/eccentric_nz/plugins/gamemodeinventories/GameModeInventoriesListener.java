@@ -15,9 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.minecart.HopperMinecart;
-import org.bukkit.entity.minecart.PoweredMinecart;
-import org.bukkit.entity.minecart.StorageMinecart;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class GameModeInventoriesListener implements Listener {
@@ -89,7 +87,7 @@ public class GameModeInventoriesListener implements Listener {
     }
 
     @EventHandler
-    public void onMinecartClick(PlayerInteractEntityEvent event) {
+    public void onEntityClick(PlayerInteractEntityEvent event) {
         if (plugin.getConfig().getBoolean("restrict_creative")) {
             Entity entity = event.getRightClicked();
             Player p = event.getPlayer();
@@ -126,6 +124,20 @@ public class GameModeInventoriesListener implements Listener {
                 event.setCancelled(true);
                 if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
                     p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to pick up items in CREATIVE!");
+                }
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void noHorseInventory(InventoryOpenEvent event) {
+        if (plugin.getConfig().getBoolean("restrict_creative") && plugin.inventoryHandler.isInstanceOf(event.getInventory().getHolder())) {
+            Player p = (Player) event.getPlayer();
+            GameMode gm = p.getGameMode();
+            if (gm.equals(GameMode.CREATIVE) && !p.hasPermission("gamemodeinventories.bypass")) {
+                event.setCancelled(true);
+                if (!plugin.getConfig().getBoolean("dont_spam_chat")) {
+                    p.sendMessage(GameModeInventoriesConstants.MY_PLUGIN_NAME + "You are not allowed to access horse inventories in CREATIVE!");
                 }
             }
         }
