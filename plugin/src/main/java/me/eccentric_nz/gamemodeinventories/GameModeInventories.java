@@ -87,7 +87,7 @@ public class GameModeInventories extends JavaPlugin implements Listener {
         }
 
         try {
-            final Class<?> clazz = Class.forName("me.eccentric_nz.gamemodeinventories.GameModeInventoriesInventory_" + version);
+            final Class<?> clazz = Class.forName("me.eccentric_nz.gamemodeinventories.nms.GameModeInventoriesInventory_" + version);
             // Check if we have a NMSHandler class at that location.
             if (GameModeInventoriesInventory_api.class.isAssignableFrom(clazz)) { // Make sure it actually implements IOP
                 this.inventoryHandler = (GameModeInventoriesInventory_api) clazz.getConstructor().newInstance(); // Set our handler
